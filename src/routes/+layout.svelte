@@ -2,6 +2,7 @@
     import { enhance } from '$app/forms'
     import { invalidate, invalidateAll, goto } from '$app/navigation'
     import { onMount } from 'svelte'
+    import '../app.css'
 
     export let data
 
@@ -36,7 +37,7 @@
 </script>
 
 <a href="/">Home</a>
-<a href="/login">Login</a>
+<a href="/blogs">Blogs</a>
 
 <span id="auth_header">
     {#if !data.session}
@@ -48,7 +49,10 @@
         </form>
     {/if}
 </span>
-<slot />
+
+<div class="m-20">
+    <slot />
+</div>
 
 <style>
     #auth_header {
