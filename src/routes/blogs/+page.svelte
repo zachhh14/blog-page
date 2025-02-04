@@ -1,8 +1,26 @@
 <script>
-    import { goto } from '$app/navigation'
     import { supabase } from '$lib/supabaseClient'
 
     let blogs = $state([])
+    let page = $state(1)
+    let limit = $state(5)
+    let totalPages = $state(1)
+
+    const fetchPosts = async () => {
+        const start = (page - 1) * limit
+        const end = start + limit - 1
+        const { data, error, count } = await supabase
+            .from('blogs')
+            .select('*', { count: 'exact' })
+            .range(start, end)
+
+        if (error) {
+            console.error(error)
+        } else {
+            blogs = data
+            totalPages = Math.ceil(count / limit)
+        }
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault()
@@ -25,13 +43,18 @@
             fetchPosts()
         }
     }
-    const fetchPosts = async () => {
-        const { data, error } = await supabase.from('blogs').select()
 
-        if (error) {
-            console.error(error)
-        } else {
-            blogs = data
+    const nextPage = () => {
+        if (page < totalPages) {
+            page++
+            fetchPosts()
+        }
+    }
+
+    const prevPage = () => {
+        if (page > 1) {
+            page--
+            fetchPosts()
         }
     }
 
@@ -83,3 +106,17 @@
         {/each}
     </tbody>
 </table>
+
+<div class="flex justify-between mt-4">
+    <button
+        class="p-2 text-white bg-black rounded disabled:opacity-50"
+        onclick={prevPage}
+        disabled={page === 1}>Previous</button
+    >
+    <span>Page {page} of {totalPages}</span>
+    <button
+        class="p-2 text-white bg-black rounded disabled:opacity-50"
+        onclick={nextPage}
+        disabled={page === totalPages}>Next</button
+    >
+</div>
