@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
     let { data } = $props()
 </script>
 
@@ -6,4 +6,5 @@
     {#each data.instruments as instrument}
         <li>{instrument.name}</li>
     {/each}
-</ul>
+</ul> -->
+<h1>  Welcome to this website ...</h1>
