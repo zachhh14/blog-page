@@ -22,6 +22,7 @@
 		"vitest": "^3.0.0"
 	},
 	"dependencies": {
+		"@supabase/auth-helpers-sveltekit": "^0.13.0",
 		"@supabase/ssr": "^0.5.2",
 		"@supabase/supabase-js": "^2.48.1",
 		"@sveltejs/adapter-static": "^3.0.8"
