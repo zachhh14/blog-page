@@ -1,6 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit'
 import { AuthApiError } from '@supabase/supabase-js'
 
+
 export const actions = {
     login: async (event) => {
         const { request, url, locals } = event
@@ -28,13 +29,13 @@ export const actions = {
             })
         }
 
-        redirect(307, '/')
+        throw redirect(307, '/')
     },
 }
 
 export const load = async ({ locals }) => {
     // if there is a user's session redirect back to the home page
     if (locals.session) {
-        redirect(303, '/')
+        throw redirect(303, '/')
     }
 }
