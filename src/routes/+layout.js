@@ -1,4 +1,3 @@
-export const prerender = true;
 import {
     PUBLIC_SUPABASE_ANON_KEY,
     PUBLIC_SUPABASE_URL,
