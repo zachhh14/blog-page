@@ -1,1 +1,0 @@
-import{b as r,a as t}from"../chunks/CFLjmR9U.js";import"../chunks/CQlRmcQH.js";import{n as a}from"../chunks/BaZMwfK4.js";function s(o){a();var e=r("There was some logging error.");t(o,e)}export{s as component};
