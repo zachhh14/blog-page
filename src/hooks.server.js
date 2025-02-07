@@ -41,6 +41,15 @@ export const supabase = async ({ event, resolve }) => {
 }
 
 async function authorization({ event, resolve }) {
+    const { session } = await event.locals.safeGetSession()
+
+    if (
+        (event.url.pathname === '/login' ||
+            event.url.pathname === '/register') &&
+        session
+    ) {
+        throw redirect(303, '/blogs')
+    }
     // protect requests to all routes that start with /blogs
     if (
         event.url.pathname.startsWith('/blogs') &&
