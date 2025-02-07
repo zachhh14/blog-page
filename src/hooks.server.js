@@ -49,7 +49,7 @@ async function authorization({ event, resolve }) {
         const { session } = await event.locals.safeGetSession()
         if (!session) {
             // the user is not signed in
-            redirect(303, '/auth')
+            redirect(303, '/login')
         }
     }
 
@@ -61,7 +61,7 @@ async function authorization({ event, resolve }) {
         const { session } = await event.locals.safeGetSession()
         if (!session) {
             // the user is not signed in
-            throw error(303, '/auth')
+            throw error(303, '/login')
         }
     }
 
