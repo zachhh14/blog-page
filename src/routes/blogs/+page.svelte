@@ -63,7 +63,7 @@
 </script>
 
 <h1 class="text-lg font-bold text-center">Add Submission</h1>
-<form onsubmit={handleSubmit} class="flex flex-col mb-5 space-y-5">
+<form onsubmit={handleSubmit} class="flex flex-col w-full mb-5 space-y-5">
     <input type="hidden" name="submitted_by" value={data?.user?.email} />
     <label for="">Title</label>
     <input
