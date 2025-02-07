@@ -1,5 +1,5 @@
 <script lang="ts">
-    import '../app.css';
+    import '../app.css'
     import { invalidate } from '$app/navigation'
     import { onMount } from 'svelte'
 
@@ -21,4 +21,6 @@
     })
 </script>
 
-<slot />
+<div class="flex flex-col items-center justify-center w-full h-screen p-5">
+    <slot />
+</div>
