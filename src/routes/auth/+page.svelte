@@ -3,28 +3,46 @@
     let { supabase } = data
     $: ({ supabase } = data)
 
-    let email
+    // let email = 'zactec114@gmail.com' debugging
+    // let password = 'password' debugging
+    let email 
     let password
 
     const handleSignUp = async () => {
-        await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-                emailRedirectTo: `${location.origin}/auth/callback`,
-            },
-        })
+        try {
+            const response = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    emailRedirectTo: `${location.origin}/auth/callback`,
+                },
+            })
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     const handleSignIn = async () => {
-        await supabase.auth.signInWithPassword({
-            email,
-            password,
-        })
+        try {
+            const response = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            })
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     const handleSignOut = async () => {
-        await supabase.auth.signOut()
+        try {
+            const response = await supabase.auth.signOut()
+
+            await supabase.auth.getUser().then(({ data, error }) => {
+                console.log('Current User:', data.user)
+            })
+        } catch (error) {
+            console.error(error)
+        }
     }
 </script>
 
