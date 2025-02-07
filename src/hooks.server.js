@@ -1,10 +1,12 @@
 import {
-    PUBLIC_SUPABASE_URL,
     PUBLIC_SUPABASE_ANON_KEY,
+    PUBLIC_SUPABASE_URL,
 } from '$env/static/public'
 import { createSupabaseServerClient } from '@supabase/auth-helpers-sveltekit'
+import { error, redirect } from '@sveltejs/kit'
+import { sequence } from '@sveltejs/kit/hooks'
 
-export const handle = async ({ event, resolve }) => {
+export const supabase = async ({ event, resolve }) => {
     event.locals.supabase = createSupabaseServerClient({
         supabaseUrl: PUBLIC_SUPABASE_URL,
         supabaseKey: PUBLIC_SUPABASE_ANON_KEY,
@@ -37,3 +39,33 @@ export const handle = async ({ event, resolve }) => {
         },
     })
 }
+
+async function authorization({ event, resolve }) {
+    // protect requests to all routes that start with /blogs
+    if (
+        event.url.pathname.startsWith('/blogs') &&
+        event.request.method === 'GET'
+    ) {
+        const { session } = await event.locals.safeGetSession()
+        if (!session) {
+            // the user is not signed in
+            redirect(303, '/auth')
+        }
+    }
+
+    // protect POST requests to all routes that start with /protected-posts
+    if (
+        event.url.pathname.startsWith('/blogs') &&
+        event.request.method === 'POST'
+    ) {
+        const { session } = await event.locals.safeGetSession()
+        if (!session) {
+            // the user is not signed in
+            throw error(303, '/auth')
+        }
+    }
+
+    return resolve(event)
+}
+
+export const handle = sequence(supabase, authorization)
