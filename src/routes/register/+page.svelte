@@ -1,14 +1,21 @@
 <script>
     import { goto } from '$app/navigation'
+
     export let data
     let { supabase } = data
     $: ({ supabase } = data)
-    import { redirect } from '@sveltejs/kit'
 
     let email
     let password
+    let confirmPassword
 
-    const handleSignUp = async () => {
+    const handleSignUp = async (event) => {
+        event.preventDefault()
+        if (password !== confirmPassword) {
+            alert('Passwords do not match!')
+            return
+        }
+
         try {
             const { data, error } = await supabase.auth.signUp({
                 email,
@@ -18,7 +25,8 @@
 
             goto('/login')
         } catch (error) {
-            console.error(error)
+            alert(error.message)
+            console.error(error.message)
         }
     }
 </script>
@@ -27,24 +35,37 @@
     onsubmit={handleSignUp}
     class="flex flex-col justify-center p-5 space-y-2 text-white bg-black border rounded"
 >
-    <div class="flex space-x-2">
-        <div class="flex flex-col space-y-2">
-            <label for="email" class="h-1/2">Email</label>
-            <label for="password">Password</label>
-        </div>
-        <div class="flex flex-col space-y-2 text-black">
-            <input
-                name="email"
-                bind:value={email}
-                class="p-2 border rounded h-1/2"
-            />
-            <input
-                type="password"
-                name="password"
-                bind:value={password}
-                class="p-2 border rounded"
-            />
-        </div>
+    <label for="email">Email</label>
+    <input
+        type="text"
+        class="p-2 text-black border rounded"
+        name="email"
+        bind:value={email}
+        required
+    />
+    <label for="password">Password</label>
+    <input
+        type="password"
+        class="p-2 text-black border rounded"
+        name="password"
+        bind:value={password}
+        required
+    />
+    <label for="password">Confirm Password</label>
+    <input
+        type="password"
+        class="p-2 text-black border rounded"
+        name="confirm_password"
+        bind:value={confirmPassword}
+        required
+    />
+    <div class="flex flex-col">
+        <button class="p-2 my-4 text-black bg-white rounded" type="submit">
+            Register
+        </button>
+        <span>
+            Already have an account?
+            <a href="/login" class="underline"> Login </a>
+        </span>
     </div>
-    <button class="p-2 text-black bg-white rounded">Register</button>
 </form>

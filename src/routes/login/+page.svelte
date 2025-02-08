@@ -1,10 +1,10 @@
 <script>
     import { goto } from '$app/navigation'
+    
     export let data
     let { supabase } = data
     $: ({ supabase } = data)
-    import { redirect } from '@sveltejs/kit'
-
+    
     let email
     let password
 
@@ -15,14 +15,12 @@
                 password,
             })
 
-            if (error) {
-                throw error
-            }
+            if (error) throw error
 
             goto('/blogs')
         } catch (error) {
-            alert(error)
-            console.error(error)
+            alert(error.message)
+            console.error(error.message)
         }
     }
 </script>
