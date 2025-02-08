@@ -6,7 +6,7 @@ import { createSupabaseServerClient } from '@supabase/auth-helpers-sveltekit'
 import { error, redirect } from '@sveltejs/kit'
 import { sequence } from '@sveltejs/kit/hooks'
 
-export const supabase = async ({ event, resolve }) => {
+async function supabase({ event, resolve }) {
     event.locals.supabase = createSupabaseServerClient({
         supabaseUrl: PUBLIC_SUPABASE_URL,
         supabaseKey: PUBLIC_SUPABASE_ANON_KEY,
@@ -23,9 +23,7 @@ export const supabase = async ({ event, resolve }) => {
             data: { user },
             error,
         } = await event.locals.supabase.auth.getUser()
-        if (error) {
-            return { session: null, user: null }
-        }
+        if (error) return { session: null, user: null }
 
         const {
             data: { session },
@@ -50,14 +48,11 @@ async function authorization({ event, resolve }) {
     ) {
         throw redirect(303, '/blogs')
     }
-    // protect requests to all routes that start with /blogs
     if (
         event.url.pathname.startsWith('/blogs') &&
         event.request.method === 'GET'
     ) {
-        const { session } = await event.locals.safeGetSession()
         if (!session) {
-            // the user is not signed in
             redirect(303, '/login')
         }
     }
@@ -67,7 +62,6 @@ async function authorization({ event, resolve }) {
         event.url.pathname.startsWith('/blogs') &&
         event.request.method === 'POST'
     ) {
-        const { session } = await event.locals.safeGetSession()
         if (!session) {
             // the user is not signed in
             throw error(303, '/login')

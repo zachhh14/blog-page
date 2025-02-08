@@ -8,17 +8,15 @@
     let email
     let password
 
-
-    const handleSignIn = async () => {
+    const handleSignUp = async () => {
         try {
-            const {data, error} = await supabase.auth.signInWithPassword({
+            const { data, error } = await supabase.auth.signUp({
                 email,
                 password,
             })
-
             if (error) throw error
 
-            goto('/blogs')
+            goto('/login')
         } catch (error) {
             console.error(error)
         }
@@ -26,7 +24,7 @@
 </script>
 
 <form
-    onsubmit={handleSignIn}
+    onsubmit={handleSignUp}
     class="flex flex-col justify-center p-5 space-y-2 text-white bg-black border rounded"
 >
     <div class="flex space-x-2">
@@ -48,9 +46,5 @@
             />
         </div>
     </div>
-    <button class="p-2 text-black bg-white rounded">Login</button>
-    <span class="text-center">
-        Don't have an account?
-        <a href="/register" class="underline"> Register </a>
-    </span>
+    <button class="p-2 text-black bg-white rounded">Register</button>
 </form>
