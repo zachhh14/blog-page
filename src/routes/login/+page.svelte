@@ -8,18 +8,20 @@
     let email
     let password
 
-
     const handleSignIn = async () => {
         try {
-            const {data, error} = await supabase.auth.signInWithPassword({
+            const { data, error } = await supabase.auth.signInWithPassword({
                 email,
                 password,
             })
 
-            if (error) throw error
+            if (error) {
+                throw error
+            }
 
             goto('/blogs')
         } catch (error) {
+            alert(error)
             console.error(error)
         }
     }
