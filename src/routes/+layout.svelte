@@ -1,7 +1,7 @@
-<!-- src/routes/+layout.svelte -->
 <script lang="ts">
     import { invalidate } from '$app/navigation'
     import { onMount } from 'svelte'
+    import '../app.css'
 
     export let data
 
@@ -21,4 +21,6 @@
     })
 </script>
 
-<slot />
+<div class="flex flex-col items-center justify-center w-full h-screen p-5">
+    <slot />
+</div>

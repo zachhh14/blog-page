@@ -1,6 +1,7 @@
 <script>
+    import { goto } from '$app/navigation'
     import { supabase } from '$lib/supabaseClient'
-
+    
     let { data } = $props()
     let blogs = $state([])
     let page = $state(1)
@@ -15,12 +16,10 @@
             .select('*', { count: 'exact' })
             .range(start, end)
 
-        if (error) {
-            console.error(error)
-        } else {
-            blogs = data
-            totalPages = Math.ceil(count / limit)
-        }
+        if (error) throw error
+
+        blogs = data
+        totalPages = Math.ceil(count / limit)
     }
 
     const handleSubmit = async (event) => {
@@ -60,10 +59,27 @@
     }
 
     fetchPosts()
+
+    const handleSignOut = async () => {
+        try {
+            const { error } = await data.supabase.auth.signOut()
+
+            if (error) throw error
+
+            goto('/login')
+        } catch (error) {
+            console.error(error)
+        }
+    }
 </script>
 
-<h1 class="text-lg font-bold text-center">Add Submission</h1>
-<form onsubmit={handleSubmit} class="flex flex-col mb-5 space-y-5">
+<div class="flex items-center justify-between w-full">
+    <h1 class="text-lg font-bold text-center">Add Submission</h1>
+    <form onsubmit={handleSignOut}>
+        <button class="underline" type="submit"> Signout </button>
+    </form>
+</div>
+<form onsubmit={handleSubmit} class="flex flex-col w-full mb-5 space-y-5">
     <input type="hidden" name="submitted_by" value={data?.user?.email} />
     <label for="">Title</label>
     <input
